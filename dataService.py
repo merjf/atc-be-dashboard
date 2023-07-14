@@ -3,21 +3,22 @@ from pandas.core.frame import DataFrame
 import numpy as np
 import json
 
-def loadData():
-    filedf = pd.read_csv('.data/ListaMovimenti.csv', sep=';')
+def loadData(filename):
+    filedf = pd.read_csv('./data/'+filename, sep=',',  encoding= 'unicode_escape')
     dataFrame = pd.DataFrame()
     for index, row in filedf.iterrows():
         if pd.isnull(row[1]):
-            operation = float(row[2].replace('.', '').replace(',', '.'))
+            operation = row[2]
         else:
-            operation = -float(row[1].replace('.', '').replace(',', '.'))
+            operation = row[1]
         newItem = { 'operation': operation, 'description': row[3], 'valueDate': row[0]}
         dataFrame = dataFrame.append(newItem, ignore_index=True)
     dataFrame['valueDate'] = pd.to_datetime(dataFrame['valueDate'], format='%d/%m/%Y')
     return dataFrame
 
-def getData():
-    dataFrame = loadData()
+def getData(filename):
+    dataFrame = loadData(filename)
+    print(dataFrame)
     dataFrame = refineData(dataFrame)
     generalValues = extractGeneralValues(dataFrame.copy())
     weekAmounts = dataFrame['operation'].groupby(dataFrame['valueDate'].dt.to_period('W')).sum()

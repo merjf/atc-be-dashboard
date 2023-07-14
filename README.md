@@ -1,5 +1,7 @@
 # ATC - Income Outcome Dashboard
 
-## Run Application
-
-FLASK_APP=gateway.py flask run
+## python application
+- py -m  pipreqs.pipreqs --force .
+- py -3 -m venv --system-site-packages venv
+- source venv/Scripts/activate
+- py -3 -m gateway
